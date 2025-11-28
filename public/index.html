@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>US Taxation Map - Scenario Visualizer</title>
+  <style>
+    body { font-family: sans-serif; }
+    #map { width: 800px; height: 500px; margin: 20px auto; }
+    .controls { text-align: center; margin: 20px; }
+    .legend { text-align: center; }
+    .state { cursor: pointer; stroke: #fff; stroke-width: 1; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">US Taxation Map - Scenario Visualizer</h1>
+  <div class="controls">
+    <input type="file" id="csvInput" accept=".csv">
+    <button id="randomBtn">Random Scenario</button>
+    <span id="status"></span>
+  </div>
+  <div id="map"></div>
+  <div class="legend">
+    <span style="background:#0000ff;color:#fff;padding:2px 8px;">Low</span>
+    <span style="background:#ff0000;color:#fff;padding:2px 8px;">High</span>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
