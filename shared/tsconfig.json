@@ -1,0 +1,20 @@
+// shared/tsconfig.json
+{
+  "extends": "../tsconfig.json", // Inherit from root config
+  "compilerOptions": {
+    "composite": true, // Essential for being referenced
+    "declaration": true, // *** CRITICAL: Generates .d.ts files ***
+    "declarationMap": true,
+    "target": "es2020",
+    "module": "esnext", // Or "commonjs" depending on usage
+    "moduleResolution": "node", // Or "bundler" if primarily used by frontend
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./", // Base URL relative to this tsconfig.json
+    "paths": {
+      "@shared/*": ["src/*"] // Alias for shared library's own source
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}

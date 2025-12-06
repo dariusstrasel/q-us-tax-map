@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["jest", "node", "mocha", "vite/client", "testing-library__react"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx"
+  ],
+  "exclude": [
+    "cypress", // Exclude the Cypress folder
+    "./cypress.config.ts", // Exclude the Cypress configuration file
+    "**/*.cy.tsx" // Exclude Cypress component test files
+]
+}

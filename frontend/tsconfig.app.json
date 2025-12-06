@@ -1,0 +1,26 @@
+// q-us-tax-map/frontend/tsconfig.app.json
+{
+  "extends": "../tsconfig.json", // Inherits from root config
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler", // Common for frontend/Vite
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true, // Typically true if only used for type checking/bundling
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"] // Local alias for frontend source files
+    },
+    "jsx": "react-jsx"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "./tsconfig.node.json" } // References Node.js target config
+  ]
+}

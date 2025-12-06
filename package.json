@@ -1,26 +1,18 @@
 {
   "name": "q-us-tax-map",
   "version": "1.0.0",
-  "description": "/q-us-map/\r ├── src/\r │   ├── app.module.ts\r │   ├── main.ts\r │   ├── map/\r │   │   ├── map.controller.ts\r │   │   ├── map.service.ts\r │   │   └── map.module.ts\r │   ├── csv/\r │   │   ├── csv.controller.ts\r │   │   ├── csv.service.ts\r │   │   └── csv.module.ts\r │   ├── scenario/\r │   │   ├── scenario.controller.ts\r │   │   ├── scenario.service.ts\r │   │   └── scenario.module.ts\r │   └── static/\r │       ├── static.controller.ts\r │       └── static.module.ts\r ├── public/\r │   ├── index.html\r │   ├── app.js\r │   └── us-map.svg\r ├── package.json\r └── ...",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "dist/main.js",
+  "private": true,
   "scripts": {
-    "build": "nest build",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:prod": "node dist/main"
-  },
-  "dependencies": {
-    "@nestjs/common": "^11.1.9",
-    "@nestjs/core": "^11.1.9",
-    "@nestjs/platform-express": "^11.1.9",
-    "multer": "^2.0.2"
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "start": "npm --prefix backend run start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "test": "npm --prefix backend run test && npm --prefix frontend run test"
   },
   "devDependencies": {
-    "@types/express": "^5.0.5",
-    "@types/multer": "^2.0.0",
-    "@types/node": "^24.10.1"
+    "@types/jest": "^30.0.0",
+    "eslint": "^8.42.0",
+    "jest": "^30.2.0",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.4.6"
   }
 }

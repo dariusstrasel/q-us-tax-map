@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "baseUrl": ".",           // <--- IMPORTANT: relative to repo root
+    "outDir": "dist-scripts",
+    "rootDir": "scripts"
+  },
+  "include": ["scripts/**/*.ts"]
+}
