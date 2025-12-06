@@ -6,6 +6,6 @@ import { join } from 'path';
 export class StaticController {
     @Get()
     root(@Res() res: Response) {
-        res.sendFile(join(process.cwd(), 'public', 'index.html'));
+        res.sendFile(join(process.cwd(), '../../../frontend/dist', 'index.html'));
     }
 }

@@ -1,0 +1,2 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export const Legend = () => (_jsxs("div", { className: "legend", style: { textAlign: 'center', margin: '1em 0' }, children: [_jsx("span", { style: { background: '#0000ff', color: '#fff', padding: '2px 8px', marginRight: 8 }, children: "Low" }), _jsx("span", { style: { background: '#ff0000', color: '#fff', padding: '2px 8px' }, children: "High" })] }));

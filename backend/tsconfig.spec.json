@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "types": ["node", "jest", "supertest"]
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
+}

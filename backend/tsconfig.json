@@ -1,0 +1,27 @@
+// q-us-tax-map/backend/tsconfig.json
+{
+  "extends": "../tsconfig.json", // Inherits from root config
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "composite": true,
+    "declaration": true, // *** CRITICAL: Generates .d.ts files ***
+    "declarationMap": true, // Optional, aids debugging
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "useDefineForClassFields": false,
+    "sourceMap": true,
+    "incremental": true,
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./", // Base URL relative to this tsconfig.json
+    "paths": {
+      "@backend/*": ["src/*"],     // Alias for backend's own source
+      "@shared/*": ["../shared/src/*"] // Alias for shared library (adjust path)
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}
