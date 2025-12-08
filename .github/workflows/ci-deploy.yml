@@ -2,8 +2,8 @@ name: CI & Deploy
 
 on:
   push:
-    branches: [ master ] # or main, adjust to your default branch
-  workflow_dispatch:      # allow manual runs
+    branches: [ master ] # or main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -18,8 +18,17 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      # Root dev tooling (Jest, ESLint, etc.)
+      - name: Install root deps
         run: npm ci
+
+      # install backend deps (Nest, supertest, etc.)
+      - name: Install backend deps
+        run: npm --prefix backend install
+
+      # install frontend deps (React, Cypress, Vite, etc.)
+      - name: Install frontend deps
+        run: npm --prefix frontend install
 
       # Backend integration gate
       - name: Run backend e2e tests
@@ -28,15 +37,11 @@ jobs:
       # Frontend Cypress e2e gate
       - name: Run frontend Cypress e2e tests
         run: |
-          # Start Nest backend on :3000
           npm --prefix backend run start:dev &
-          # Start Vite dev server on :5173
           npm --prefix frontend run dev -- --host 0.0.0.0 --port 5173 &
 
-          # Wait for frontend to be up
           npx wait-on http://127.0.0.1:5173
 
-          # Run Cypress headless
           npm --prefix frontend run e2e:ci
 
   build-and-deploy:
@@ -62,8 +67,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install root deps
         run: npm ci
+
+      - name: Install frontend deps
+        run: npm --prefix frontend install
 
       - name: Build frontend (for Pages)
         run: npm --prefix frontend run build
@@ -71,7 +79,7 @@ jobs:
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/dist   # or ./docs, if that's your configured output
+          path: frontend/dist
 
       - name: Deploy to GitHub Pages
         id: deploy
