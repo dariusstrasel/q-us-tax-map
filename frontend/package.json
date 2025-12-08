@@ -12,6 +12,7 @@
     "generate-structure": "tsx scripts/generate-structure.ts",
     "typecheck": "tsc --noEmit",
     "e2e": "cypress open",
+    "e2e:ci": "cypress run",
     "test": "npm run lint && npm run typecheck"
   },
   "dependencies": {
