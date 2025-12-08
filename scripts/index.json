@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "name": "q-us-tax-map",
+    "version": "0.1.0",
+    "description": "RPG plan for US tax map monorepo (NestJS backend + React/Vite frontend).",
+    "lastUpdated": "2025-12-06"
+  },
+  "nodes": {
+    "backend-core": {
+      "area": "backend",
+      "type": "module",
+      "files": [
+        "backend/src/main.ts",
+        "backend/src/app.module.ts"
+      ],
+      "tests": []
+    },
+    "backend-map": {
+      "area": "backend",
+      "type": "feature",
+      "files": [
+        "backend/src/map/map.module.ts",
+        "backend/src/map/map.controller.ts",
+        "backend/src/map/map.service.ts"
+      ],
+      "tests": [
+        "backend/test/map.e2e-spec.ts"
+      ]
+    },
+    "backend-csv": {
+      "area": "backend",
+      "type": "feature",
+      "files": [
+        "backend/src/csv/csv.module.ts",
+        "backend/src/csv/csv.controller.ts",
+        "backend/src/csv/csv.service.ts"
+      ],
+      "tests": []
+    },
+    "backend-scenario": {
+      "area": "backend",
+      "type": "feature",
+      "files": [
+        "backend/src/scenario/scenario.module.ts",
+        "backend/src/scenario/scenario.controller.ts",
+        "backend/src/scenario/scenario.service.ts"
+      ],
+      "tests": []
+    },
+    "backend-static": {
+      "area": "backend",
+      "type": "feature",
+      "files": [
+        "backend/src/static/static.module.ts",
+        "backend/src/static/static.controller.ts",
+        "backend/public/index.html",
+        "backend/public/app.js"
+      ],
+      "tests": []
+    },
+    "frontend-app": {
+      "area": "frontend",
+      "type": "spa",
+      "files": [
+        "frontend/src/main.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/components/Legend.tsx",
+        "frontend/src/components/Controls.tsx",
+        "frontend/src/utils/color.ts"
+      ],
+      "tests": []
+    },
+    "frontend-e2e": {
+      "area": "frontend",
+      "type": "e2e",
+      "files": [
+        "frontend/cypress.config.ts",
+        "frontend/cypress/e2e/map_integration.cy.ts"
+      ],
+      "tests": []
+    }
+  },
+  "edges": [
+    { "from": "backend-core", "to": "backend-map" },
+    { "from": "backend-core", "to": "backend-csv" },
+    { "from": "backend-core", "to": "backend-scenario" },
+    { "from": "backend-core", "to": "backend-static" },
+    { "from": "frontend-app", "to": "backend-map" },
+    { "from": "frontend-app", "to": "backend-csv" },
+    { "from": "frontend-app", "to": "backend-scenario" },
+    { "from": "frontend-e2e", "to": "frontend-app" }
+  ]
+}

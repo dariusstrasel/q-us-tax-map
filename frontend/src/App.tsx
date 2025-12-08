@@ -1,6 +1,6 @@
 // src/App.tsx
 import { useState, useEffect } from 'react';
-import { USMap } from './components/USMap';
+import USMap from './components/USMap';
 import { Controls } from './components/Controls';
 import { Legend } from './components/Legend';
 import { parseCsv } from './utils/csv';
@@ -18,16 +18,17 @@ export default function App() {
     fetchMapData();
   }, []);
 
-  async function fetchMapData() {
-    try {
-      const res = await fetch('/api/map/data');
-      if (!res.ok) throw new Error();
-      setData(await res.json());
-    } catch {
-      // fallback: empty or local
-      setData({});
-    }
+async function fetchMapData() {
+  try {
+    const res = await fetch('/api/map/data'); // let Vite proxy to 3000
+    if (!res.ok) throw new Error('Failed to fetch map data');
+    const json = await res.json();           // <-- JSON, not text
+    setData(json);                           // e.g. { CA: 34, TX: 22, ... }
+  } catch (error) {
+    console.error('Error fetching map data:', error);
+    setData({});
   }
+}
 
   async function handleCsvUpload(file: File) {
     const formData = new FormData();
