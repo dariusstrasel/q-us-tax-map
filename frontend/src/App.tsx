@@ -58,8 +58,8 @@ async function fetchMapData() {
   }
 
   return (
-    <div>
-      <h1>US Taxation Map - Scenario Visualizer</h1>
+    <div className="app">
+      <h1 className='app-title'>US Taxation Map - Scenario Visualizer</h1>
       <Controls onCsvUpload={handleCsvUpload} onRandomize={handleRandomize} />
       <USMap data={data} colorForValue={colorForValue} />
       <Legend />
