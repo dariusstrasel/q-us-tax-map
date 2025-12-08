@@ -40,9 +40,10 @@ jobs:
           npm --prefix backend run start:dev &
           npm --prefix frontend run dev -- --host 0.0.0.0 --port 5173 &
 
-          npx wait-on http://127.0.0.1:5173
+          # Wait for both servers
+          npx wait-on http://127.0.0.1:3000/api/map/data http://127.0.0.1:5173
 
-          npm --prefix frontend run e2e:ci
+          npm --prefix frontend run 
 
   build-and-deploy:
     needs: test

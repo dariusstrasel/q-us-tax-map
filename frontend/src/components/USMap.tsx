@@ -25,15 +25,16 @@ export const USMap: React.FC<Props> = ({ data, colorForValue }) => {
     console.log('USMap data keys:', Object.keys(data));
     console.log('CA element inside SVG:', svgRef.current.getElementById('CA'));
 
-  Object.entries(data).forEach(([state, value]) => {
-    const el = svgRef.current!.getElementById(state) as SVGGraphicsElement | null;
-    if (el) {
-      // Important: override the style-level fill, not just the attribute
-      (el as SVGPathElement).style.fill = colorForValue(value);
-      el.classList.add('state');
-      el.setAttribute('title', `${state}: ${value}`);
-    }
-  });
+Object.entries(data).forEach(([state, value]) => {
+  const el = svgRef.current!.getElementById(state) as SVGGraphicsElement | null;
+  if (el) {
+    const color = colorForValue(value);
+    (el as SVGPathElement).style.fill = color;
+    el.setAttribute('fill', color);            // <-- add this
+    el.classList.add('state');
+    el.setAttribute('title', `${state}: ${value}`);
+  }
+});
 }, [data, colorForValue]);
 
   return <USMapSVG ref={svgRef} />;
