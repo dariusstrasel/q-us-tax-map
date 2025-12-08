@@ -1,0 +1,235 @@
+{
+  "name": "q-us-tax-map",
+  "description": "Monorepo for a US Taxation Map demo. Backend: NestJS API. Frontend: React + TypeScript + Vite SPA. Includes Jest e2e tests for backend and Cypress e2e tests for frontend.",
+  "primary_docs": [
+    "README.md",
+    "rpg/index.json",
+    ".github/workflows/ci-deploy.yml"
+  ],
+  "structure": {
+    "backend": {
+      "path": "backend",
+      "description": "NestJS HTTP API providing map data, CSV upload, and random scenario endpoints.",
+      "entry": "src/main.ts",
+      "key_files": [
+        "src/app.module.ts",
+        "src/map/map.module.ts",
+        "src/map/map.controller.ts",
+        "src/map/map.service.ts",
+        "src/csv/csv.module.ts",
+        "src/csv/csv.controller.ts",
+        "src/csv/csv.service.ts",
+        "src/scenario/scenario.module.ts",
+        "src/scenario/scenario.controller.ts",
+        "src/scenario/scenario.service.ts",
+        "src/static/static.module.ts",
+        "src/static/static.controller.ts",
+        "public/index.html",
+        "public/app.js",
+        "test/map.e2e-spec.ts",
+        "test/jest-e2e-config.json"
+      ],
+      "dev_commands": {
+        "install": "npm install",
+        "start": "npm run start:dev",
+        "build": "npm run build",
+        "test_unit": "npm run test",
+        "test_e2e": "npm run test:e2e"
+      },
+      "notes": [
+        "Backend listens on http://localhost:3000 by default.",
+        "Static assets served from backend/public.",
+        "StaticController can serve the built frontend from ../frontend/dist in production."
+      ]
+    },
+    "frontend": {
+      "path": "frontend",
+      "description": "React + TypeScript + Vite SPA that renders an SVG US map and colors states by tax value.",
+      "entry": "src/main.tsx",
+      "key_files": [
+        "src/App.tsx",
+        "src/components/USMap.tsx",
+        "src/components/Controls.tsx",
+        "src/components/Legend.tsx",
+        "src/utils/color.ts",
+        "src/utils/csv.ts",
+        "src/assets/us-map.svg",
+        "src/index.css",
+        "src/App.css",
+        "vite.config.ts",
+        "cypress/e2e/map_integration.cy.ts"
+      ],
+      "dev_commands": {
+        "install": "npm install",
+        "dev": "npm run dev",
+        "build": "npm run build",
+        "lint": "npm run lint",
+        "typecheck": "npm run typecheck",
+        "test_fast": "npm run test",
+        "e2e_local": "npm run e2e:ci",
+        "e2e_pages": "npm run e2e:pages"
+      },
+      "notes": [
+        "Vite dev server runs by default on http://localhost:5173.",
+        "Vite proxy forwards /api/* to http://localhost:3000 in development.",
+        "For GitHub Pages, vite.config.ts uses base: '/q-us-tax-map/' and outDir: '../docs' or 'frontend/dist', depending on the current config."
+      ]
+    },
+    "root": {
+      "path": ".",
+      "description": "Root monorepo configuration, CI workflow, RPG, and shared TS config.",
+      "key_files": [
+        "package.json",
+        "jest.config.js",
+        "tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.scripts.json",
+        "rpg/index.json",
+        "scripts/validate-structure.js",
+        "scripts/generate-structure.js",
+        ".github/workflows/ci-deploy.yml"
+      ],
+      "dev_commands": {
+        "install_all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+        "build_all": "npm run build",
+        "test_all": "npm run test",
+        "lint_all": "npm run lint"
+      }
+    }
+  },
+  "workflow": {
+    "development": [
+      "From repo root, install dependencies for root, backend, and frontend.",
+      "Start backend: npm --prefix backend run start:dev (NestJS on :3000).",
+      "Start frontend: npm --prefix frontend run dev (Vite on :5173).",
+      "Open http://localhost:5173 to interact with the SPA.",
+      "Use Vite proxy for /api → backend."
+    ],
+    "testing": [
+      "Backend e2e: npm --prefix backend run test:e2e (uses test/jest-e2e-config.json).",
+      "Frontend fast test (lint+types): npm --prefix frontend run test.",
+      "Frontend Cypress e2e against local dev servers: see CI job that starts backend + frontend and then runs npm --prefix frontend run e2e:ci.",
+      "Optional smoke test against live GitHub Pages: npm --prefix frontend run e2e:pages."
+    ],
+    "ci_cd": {
+      "primary_workflow_file": ".github/workflows/ci-deploy.yml",
+      "summary": "CI runs backend e2e tests and frontend Cypress e2e tests. Deploy to GitHub Pages only occurs if tests pass.",
+      "deploy_target": "GitHub Pages (frontend/dist or docs/)."
+    }
+  },
+  "conventions": {
+    "language": "TypeScript for most sources; some JavaScript for scripts and public assets.",
+    "style": "Strict TypeScript, React function components, NestJS modules/controllers/services.",
+    "commit_message": {
+      "style": "conventional_commits",
+      "format": "<type>(<scope>): <summary>",
+      "types": [
+        "feat",
+        "fix",
+        "refactor",
+        "chore",
+        "docs",
+        "test",
+        "build",
+        "ci"
+      ],
+      "scopes": [
+        "backend",
+        "frontend",
+        "map",
+        "csv",
+        "scenario",
+        "static",
+        "scripts",
+        "rpg",
+        "ci",
+        "build"
+      ],
+      "rules": [
+        "Use lowercase type and optional scope, e.g. feat(frontend): add responsive layout for mobile.",
+        "Summary should be in the imperative mood, max ~72 chars.",
+        "Group changes by primary concern: code changes vs docs vs CI.",
+        "For cross-cutting changes, use a composite scope, e.g. refactor(backend,frontend): ...",
+        "Avoid bare summaries without type; prefer the typed format."
+      ],
+      "examples": [
+        "feat(frontend): add USMap SVG rendering and color mapping",
+        "fix(backend): handle missing state codes when parsing CSV uploads",
+        "test(frontend): add Cypress integration test for random scenario",
+        "chore(ci): gate GitHub Pages deploy on backend e2e and Cypress",
+        "refactor(scripts): simplify structure validation and logging",
+        "docs: update README with deployment and RPG instructions"
+      ]
+    },
+    "branching": {
+      "preferences": [
+        "Small, focused branches per feature or fix.",
+        "Keep master/main deployable; CI must be green before merging."
+      ]
+    }
+  },
+  "ai_guidelines": {
+    "goals": [
+      "Help maintain a stable CI pipeline: do not break backend e2e or Cypress e2e tests.",
+      "Preserve the contract between frontend and backend APIs (JSON shapes, endpoints).",
+      "Keep commit messages consistent with the conventional commit format defined above.",
+      "Prefer minimal and explicit changes over large sweeping refactors."
+    ],
+    "dos": [
+      "Update both backend and frontend when changing API contracts.",
+      "Add or update tests (Jest or Cypress) when modifying behavior.",
+      "Update rpg/index.json when adding significant modules/features.",
+      "Run appropriate npm scripts before suggesting or creating commits."
+    ],
+    "donts": [
+      "Do not silently change ports or base URLs without updating Vite proxy, CI, and docs.",
+      "Do not remove or disable tests to make CI pass.",
+      "Do not introduce new global dependencies without adding them to the correct package.json."
+    ]
+  },
+  "tools": {
+    "vscode": {
+      "notes": [
+        "Use this file as long-lived context for VS Code agents or GitHub Copilot agents.",
+        "When asked for commands, prefer using the dev_commands sections above.",
+        "When generating commits, follow conventions.commit_message.*."
+      ]
+    },
+    "pieces": {
+      "suggested_materials": [
+        {
+          "name": "q-us-tax-map: agents",
+          "path": "agents.q-us-tax-map.json",
+          "purpose": "Anchor context for the project; load this before answering questions or generating code."
+        },
+        {
+          "name": "q-us-tax-map: ci-deploy workflow",
+          "path": ".github/workflows/ci-deploy.yml",
+          "purpose": "Reference for how tests and deployment are wired."
+        },
+        {
+          "name": "q-us-tax-map: backend e2e test template",
+          "path": "backend/test/map.e2e-spec.ts",
+          "purpose": "Pattern for new e2e tests using Nest TestingModule and supertest."
+        },
+        {
+          "name": "q-us-tax-map: Cypress US map integration",
+          "path": "frontend/cypress/e2e/map_integration.cy.ts",
+          "purpose": "Pattern for frontend integration tests that depend on backend + Vite dev servers."
+        }
+      ],
+      "cli_examples": [
+        "pieces ask \"Given the q-us-tax-map agents file, propose a new e2e test for CSV upload failures.\"",
+        "pieces ask \"Using the q-us-tax-map commit convention, draft a message for a change that adds a new legend component variant.\""
+      ],
+      "tags": [
+        "project:q-us-tax-map",
+        "stack:nestjs",
+        "stack:react",
+        "stack:vite",
+        "tests:jest",
+        "tests:cypress"
+      ]
+    }
+  }
+}
