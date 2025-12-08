@@ -11,7 +11,8 @@
     "validate-structure": "tsx scripts/validate-structure.ts",
     "generate-structure": "tsx scripts/generate-structure.ts",
     "typecheck": "tsc --noEmit",
-    "e2e": "cypress open"
+    "e2e": "cypress open",
+    "test": "npm run lint && npm run typecheck"
   },
   "dependencies": {
     "react": "^19.2.0",

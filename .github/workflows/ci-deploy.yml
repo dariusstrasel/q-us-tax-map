@@ -2,71 +2,63 @@ name: CI & Deploy
 
 on:
   push:
-    branches: [ master ]   # or main, adjust to your default branch
-  workflow_dispatch:        # allow manual runs
+    branches: [ master ]   # or main
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      # Choose what "integration test" means for you:
-      # backend e2e:
-      # - name: Run backend e2e tests
-      #   run: npm --prefix backend run test:e2e
-
-      # or full test suite:
-      - name: Run tests
-        run: npm run test
+      # This is your integration gate
+      - name: Run backend e2e tests
+        run: npm --prefix backend run test:e2e
 
   build-and-deploy:
-    needs: test                    # don't run unless test job finishes
+    needs: test
     if: needs.test.result == 'success'
     runs-on: ubuntu-latest
-
     permissions:
       pages: write
       id-token: write
       contents: read
-
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
+      # Optional: re-run e2e here if you want, or rely on `needs: test`
+      # - name: Run backend e2e tests
+      #   run: npm --prefix backend run test:e2e
+
       - name: Build frontend (for Pages)
         run: npm --prefix frontend run build
-        # If you’re outputting to ../docs via Vite, change to:
-        # run: npm --prefix frontend run build
 
-      - name: Upload Pages artifact
+      - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/dist      # or ./docs if that’s your configured output
+          path: frontend/dist
 
       - name: Deploy to GitHub Pages
         id: deploy
