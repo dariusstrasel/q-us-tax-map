@@ -21,7 +21,7 @@ export default defineConfig({
     },
   },
     build: {
-    outDir: '../docs',   // <--- emit into repo-root/docs
+    outDir: 'dist',   // <--- emit into repo-root/docs
     emptyOutDir: true,   // clear old contents
   },
 })
