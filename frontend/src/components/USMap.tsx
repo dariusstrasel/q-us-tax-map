@@ -160,73 +160,69 @@ export default function USMap({
   }, [data, colorForValue]);
 
   // 3. Adjust small-state labels (collision detection + leader lines)
-  useEffect(() => {
-    const svg = getSvg();
-    if (!svg) return;
+// Create text labels for all states and always externalize the “small” ones with leader lines
+useEffect(() => {
+  const svg = containerRef.current?.querySelector('svg') as SVGSVGElement | null;
+  if (!svg) return;
 
-    // Remove old leader lines
-    svg.querySelectorAll('.state-label-leader').forEach((node) => node.remove());
+  // Clear any existing labels/leader lines (hot reload safety)
+  svg
+    .querySelectorAll<SVGElement>('.state-label, .state-label-leader')
+    .forEach((node) => node.remove());
 
-    const labels = Array.from(
-      svg.querySelectorAll<SVGTextElement>('text.state-label'),
+  // 1) Create labels at centroids
+  const created: Array<{ code: string; label: SVGTextElement }> = [];
+
+  Object.entries(STATE_CENTROIDS).forEach(([code, { x, y }]) => {
+    const text = svg.ownerDocument.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'text',
     );
+    text.textContent = code;
+    text.setAttribute('x', String(x));
+    text.setAttribute('y', String(y));
+    text.setAttribute('class', 'state-label');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('pointer-events', 'none');
+    text.setAttribute('fill', '#333');
 
-    const measured = labels.map((label) => {
-      const box = label.getBBox();
-      const code = label.textContent?.trim() ?? '';
-      return { label, box, code };
-    });
+    svg.appendChild(text);
+    created.push({ code, label: text });
+  });
 
-    const collidingCodes = new Set<string>();
+  // 2) For states with an EXTERNAL_LABEL_POSITIONS entry, move label outside and draw a leader line
+  Object.entries(EXTERNAL_LABEL_POSITIONS).forEach(([code, external]) => {
+    const entry = created.find((c) => c.code === code);
+    if (!entry) return;
 
-    for (let i = 0; i < measured.length; i++) {
-      for (let j = i + 1; j < measured.length; j++) {
-        const a = measured[i];
-        const b = measured[j];
-        if (!a.code || !b.code) continue;
-        if (
-          !SMALL_STATE_CODES.includes(a.code) &&
-          !SMALL_STATE_CODES.includes(b.code)
-        ) {
-          continue;
-        }
-        if (rectsOverlap(a.box, b.box)) {
-          collidingCodes.add(a.code);
-          collidingCodes.add(b.code);
-        }
-      }
-    }
+    const label = entry.label;
+    const centroid = STATE_CENTROIDS[code];
+    if (!centroid) return;
 
-    collidingCodes.forEach((code) => {
-      const entry = measured.find((m) => m.code === code);
-      if (!entry) return;
-      const label = entry.label;
+    // Move label to external position
+    label.setAttribute('x', String(external.x));
+    label.setAttribute('y', String(external.y));
+    label.classList.add('state-label--external');
 
-      const centroid = STATE_CENTROIDS[code];
-      const external = EXTERNAL_LABEL_POSITIONS[code];
-      if (!centroid || !external) return;
+    // Draw leader line from state centroid to label
+    const line = svg.ownerDocument.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'line',
+    );
+    line.setAttribute('x1', String(centroid.x));
+    line.setAttribute('y1', String(centroid.y));
+    line.setAttribute('x2', String(external.x));
+    line.setAttribute('y2', String(external.y));
+    line.setAttribute('class', 'state-label-leader');
+    line.setAttribute('stroke', '#555');
+    line.setAttribute('stroke-width', '0.75');
+    line.setAttribute('stroke-linecap', 'round');
+    line.setAttribute('pointer-events', 'none');
 
-      label.setAttribute('x', String(external.x));
-      label.setAttribute('y', String(external.y));
-      label.classList.add('state-label--external');
-
-      const line = svg.ownerDocument.createElementNS(
-        'http://www.w3.org/2000/svg',
-        'line',
-      );
-      line.setAttribute('x1', String(centroid.x));
-      line.setAttribute('y1', String(centroid.y));
-      line.setAttribute('x2', String(external.x));
-      line.setAttribute('y2', String(external.y));
-      line.setAttribute('class', 'state-label-leader');
-      line.setAttribute('stroke', '#555');
-      line.setAttribute('stroke-width', '0.75');
-      line.setAttribute('stroke-linecap', 'round');
-      line.setAttribute('pointer-events', 'none');
-
-      svg.appendChild(line);
-    });
-  }, [data]);
+    svg.appendChild(line);
+  });
+}, []); // run once on mount; labels are static relative to geometry
 
   // 4. Highlight selected state with bold border
   useEffect(() => {
