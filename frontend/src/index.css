@@ -1,68 +1,65 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* SVG sizing (same behavior as before, via Tailwind) */
+svg {
+  @apply w-full h-auto max-w-[900px] block mx-auto mb-6;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Map state outlines */
+.state {
+  @apply stroke-white stroke-[0.5];
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.state--selected {
+  @apply stroke-slate-900 stroke-[2];
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* State labels + leader lines */
+.state-label {
+  @apply text-[8px] font-sans fill-[#333333];
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.state-label--external {
+  /* hook for styling if needed */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.state-label-leader {
+  @apply stroke-[#555555] stroke-[0.75] stroke-linecap-round;
+  pointer-events: none;
+}
+
+/* CSV error message */
+.csv-error {
+  @apply text-red-700 mb-3 text-center text-sm;
+}
+
+/* Modal */
+.modal-backdrop {
+  @apply fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50;
+}
+
+.modal {
+  @apply bg-white rounded-xl px-8 py-6 shadow-2xl max-w-xs w-full;
+}
+
+.modal-title {
+  @apply m-0 mb-2 text-xl font-semibold;
+}
+
+.modal-body {
+  @apply m-0 text-base;
+}
+
+.modal-tax-value {
+  @apply font-semibold;
+}
+
+.modal-tax-missing {
+  @apply text-gray-500;
+}
+
+.modal-close-button {
+  @apply mt-4 rounded-full border border-gray-300 bg-gray-50 px-4 py-1.5 text-sm cursor-pointer transition-colors hover:bg-gray-100 hover:border-gray-400;
 }

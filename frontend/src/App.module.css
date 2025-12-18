@@ -1,0 +1,40 @@
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.appTitle {
+  font-size: 2.2rem;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+/* CSV error kept global for Cypress `cy.get('.csv-error')` */
+:global(.csv-error) {
+  color: #b91c1c;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding: 1.25rem 0.75rem 2rem;
+  }
+
+  .appTitle {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 1rem 0.5rem 1.5rem;
+  }
+
+  .appTitle {
+    font-size: 1.6rem;
+  }
+}

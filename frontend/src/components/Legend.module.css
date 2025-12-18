@@ -1,0 +1,12 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.swatch {
+  width: 1.5rem;
+  height: 0.9rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(31, 41, 55, 0.25); /* gray-800 @ ~25% */
+}
