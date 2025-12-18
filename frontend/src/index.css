@@ -25,10 +25,12 @@ svg {
   /* hook for styling if needed */
 }
 
-.state-label-leader {
-  @apply stroke-[#555555] stroke-[0.75] stroke-linecap-round;
-  pointer-events: none;
-}
+  .state-label-leader {
+    stroke: #555555;
+    stroke-width: 0.75;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
 
 /* CSV error message */
 .csv-error {
