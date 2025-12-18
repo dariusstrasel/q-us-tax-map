@@ -36,7 +36,7 @@ jobs:
 
       # Frontend Cypress e2e gate
       - name: Run frontend Cypress e2e tests
-        run: |
+        run: |  
           npm --prefix backend run start:dev &
           npm --prefix frontend run dev -- --host 0.0.0.0 --port 5173 &
 
